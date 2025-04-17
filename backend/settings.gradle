@@ -1,0 +1,4 @@
+rootProject.name = 'backend'
+
+include 'spring-authorization-module'
+include 'link-service-module'
