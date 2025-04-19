@@ -8,25 +8,33 @@ logging:
 spring:
   security:
     oauth2:
-      authorizationserver:
-        client:
-          public-client:
-            registration:
-              client-id: "public-linkrew"
-              client-authentication-methods:
-                - "none"
-              authorization-grant-types:
-                - "authorization_code"
-              redirect-uris:
-                - "http://127.0.0.1:3000"
-              scopes:
-                - "openid"
-                - "profile"
-            require-authorization-consent: true
-            require-proof-key: true
+      client:
+        registration:
+          google:
+            client-id: {id}
+            client-secret: {secret}
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope:
+              - openid
+              - profile
+              - email
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://mysql:3306/spring-auth?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
     username: username
     password: password
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    generate-ddl: true
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
