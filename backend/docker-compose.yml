@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  auth-service:
+    build: 
+      context: .
+      dockerfile: ./spring-authorization-module/Dockerfile
+    container_name: spring-authorization-module
+    ports:
+      - "9000:9000"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/spring-auth?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=username
+      - SPRING_DATASOURCE_PASSWORD=password
+    depends_on:
+      - mysql
+    networks:
+      - auth-network
+    restart: always
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=spring-auth
+      - MYSQL_USER=username
+      - MYSQL_PASSWORD=password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - auth-network
+    restart: always
+
+volumes:
+  mysql-data:
+
+networks:
+  auth-network:
+    driver: bridge
